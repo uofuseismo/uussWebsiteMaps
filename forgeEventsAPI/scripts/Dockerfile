@@ -14,6 +14,9 @@ RUN cd /home/appuser &&\
     git clone https://github.com/uofuseismo/uussWebsiteMaps &&\
     cd uussWebsiteMaps/forgeEventsAPI &&\
     npm install &&\
-    npm build
-    
-#node 
+    npm run build
+
+WORKDIR uussWebsiteMaps/forgeEventsAPI
+
+# To run
+#RUN /home/appuser/uussWebsiteMaps/forgeEventsAPI npm run serve

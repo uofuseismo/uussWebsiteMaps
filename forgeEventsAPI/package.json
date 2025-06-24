@@ -2,13 +2,12 @@
   "name": "forgeeventsapi",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "ts-node ./dist/index.js --env-file=.env ./dist/index.js",
     "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node -r tsconfig-paths/register src/index.ts",
     "build": "tsc -p ./tsconfig.prod.json",
     "lint": "eslint .",
-    "serve": "node ./dist/index.js"
+    "serve": "node --env-file .env ./dist/index.js"
   },
   "_moduleAliases": {
     "@root": "./src",
