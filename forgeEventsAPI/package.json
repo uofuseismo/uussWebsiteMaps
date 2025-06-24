@@ -1,0 +1,56 @@
+{
+  "name": "forgeeventsapi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "ts-node ./dist/index.js --env-file=.env ./dist/index.js",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node -r tsconfig-paths/register src/index.ts",
+    "build": "tsc -p ./tsconfig.prod.json",
+    "lint": "eslint .",
+    "serve": "node ./dist/index.js"
+  },
+  "_moduleAliases": {
+    "@root": "./src",
+    "@/routes": "src/routes",
+    "@/database/queries": "src/database/queries",
+    "@/middleware": "src/middleware",
+    "@/controllers": "src/controllers",
+    "@/database": "src/database",
+    "@/utils": "src/utils"
+  },
+  "keywords": [],
+  "author": "Ben Baker",
+  "license": "MIT",
+  "description": "Serves QSeek events",
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/hpp": "^0.2.6",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^24.0.3",
+    "@types/pg": "^8.15.4",
+    "@types/sha1": "^1.1.5",
+    "@typescript-eslint/eslint-plugin": "^8.34.1",
+    "@typescript-eslint/parser": "^8.34.1",
+    "eslint-plugin-node": "^11.1.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.34.1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "eslint": "^9.29.0",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.1.0",
+    "hpp": "^0.2.3",
+    "http": "^0.0.1-security",
+    "morgan": "^1.10.0",
+    "node-cache": "^5.1.2",
+    "pg": "^8.16.0",
+    "sha1": "^1.1.1",
+    "tsconfig-paths": "^4.2.0"
+  }
+}
