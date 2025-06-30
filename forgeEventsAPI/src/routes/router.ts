@@ -10,6 +10,7 @@ const router = Router();
 router.get('/', (_req: Request, res: Response) => {
   res.status(200);
   res.json({
+            status: 200,
             message: 'QSeek Event API',
             routes: [{
                       route: '/api/mapEvents',
@@ -33,16 +34,18 @@ router.get('/mapEvents', (_req: Request, res: Response) => {
     const eventsAndHash = getMapEventsAndEventsHashFromCache();
     res.status(200);
     res.json({
+              status: 200,
               message: 'Events from the previous week',
-              payload: eventsAndHash,
+              data: eventsAndHash,
              });
   }
   catch (error) {
     console.warn(error);
     res.status(500);
     res.json({
+              status: 500,
               message: 'Internal error occurred while querying events',
-              payload: null,
+              data: null,
              });
   }
 });
@@ -53,23 +56,24 @@ router.get('/mapEventsHash', (__req: Request, res: Response) => {
     const eventsHash = getMapEventsHashFromCache();
     res.status(200);
     res.json({
+              status: 200,
               message: 'Hash of events from previous week',
-              payload: eventsHash,
+              data: eventsHash,
              }); 
   }
   catch (error) {
     console.warn(error);
     res.status(500);
     res.json({
+              status: 500,
               message: 'Internal error occurred while querying events',
-              payload: null,
+              data: null,
              });
   }
 });
 
 // Time range query: https://forbeslindesay.github.io/express-route-tester/
 router.get(/^\/query\/v1\/datetime\/start=(?:([^\/]+?))\/end=(?:([^\/]+?))\/?$/i,
-//router.get(/^\/query\/v1\/datetime\/start=(?:([^/]+?))\/end=(?:([^/]+?))\/?$/i,
            //query/v1/datetime/:startTime/:endTime',
            //(\\d{4})-:startMonth(\\d{2})-:startDay(\\d{2})/:endYear(\\d{4})-:endMonth(\\d{2})-:endDay(\\d{2})',
            async (req: Request, res: Response) => {
@@ -103,16 +107,18 @@ router.get(/^\/query\/v1\/datetime\/start=(?:([^\/]+?))\/end=(?:([^\/]+?))\/?$/i
       const events = await queryEventsInTimeRange(startTime, endTime);
       res.status(200);
       res.json({
+                status: 200,
                 message: `Successfully queried events from ${startTime} to ${endTime}`,
-                payload: events,
+                data: events,
                }); 
     }
     catch (error) {
       console.warn(`Server side error deteced; problem is ${error}`);
       res.status(500);
       res.json({
+                status: 500,
                 message: 'Server query error',
-                payload: null,
+                data: null,
                });
     }
   }
@@ -120,8 +126,9 @@ router.get(/^\/query\/v1\/datetime\/start=(?:([^\/]+?))\/end=(?:([^\/]+?))\/?$/i
     console.debug("400 error");
     res.status(400);
     res.json({
+              status: 400,
               message: message, 
-              payload: null,
+              data: null,
              });
   } 
 });

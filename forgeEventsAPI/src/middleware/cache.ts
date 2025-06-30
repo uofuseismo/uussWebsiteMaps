@@ -13,8 +13,7 @@ const initialEventCacheValue: IEventsAndHash = {
   events: [],
 };
 
-// We update this about every 15 minutes
-const mapEventsTimeToLive = 900;
+const mapEventsTimeToLive = 0; // Unlimited
 
 const eventMapCache = new NodeCache( { stdTTL: mapEventsTimeToLive } );
 eventMapCache.set('qseekMapEvents',
@@ -34,27 +33,37 @@ function getMapEventsHashFromCache() : string {
   if (result === null) {
     return '';
   }
-  return result.eventsHashString;
+  if (Object.hasOwn(result, 'eventsHashString')) {
+     return result.eventsHashString;
+  }
+  console.warn(`Cache appears improperly created ${result}`);
+  return ''; 
 }
 
 async function updateMapEventsCache() {
   try {
     console.debug("Performing database query in cache update...");
+    const currentHash = getMapEventsHashFromCache();
     const events = await queryEventsForMap();
     const eventsString : string = JSON.stringify(events);
     const eventsHashString : string = sha1(eventsString);
-    console.debug(`Updating with ${events.length} events and hash string ${eventsHashString}`);
-    const updateCacheValue : IEventsAndHash = {
-      eventsHashString: eventsHashString,
-      events: events,
-    };
-    const wasWritten
-       = eventMapCache.set('qseekMapEvents',
-                           updateCacheValue,
-                           mapEventsTimeToLive);
-    if (!wasWritten) {
-      console.warn('Events not written to cache');
-    }   
+    if (currentHash != eventsHashString) {
+      console.debug(`Updating with ${events.length} events and hash string ${eventsHashString}`);
+      const updateCacheValue : IEventsAndHash = {
+        eventsHashString: eventsHashString,
+        events: events,
+      };
+      const wasWritten
+         = eventMapCache.set('qseekMapEvents',
+                             updateCacheValue,
+                             mapEventsTimeToLive);
+      if (!wasWritten) {
+        console.warn('Events not written to cache');
+      }   
+    }
+    else {
+      console.debug('Events have not appeared to change');
+    }
     return true;
   }
   catch (error) {

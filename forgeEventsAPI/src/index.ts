@@ -1,4 +1,3 @@
-/* global process */
 import express from 'express';
 import { Response } from 'express';
 import { Request } from 'express';
