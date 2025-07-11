@@ -77,7 +77,6 @@ router.get(/^\/query\/v1\/datetime\/start=(?:([^\/]+?))\/end=(?:([^\/]+?))\/?$/i
            //query/v1/datetime/:startTime/:endTime',
            //(\\d{4})-:startMonth(\\d{2})-:startDay(\\d{2})/:endYear(\\d{4})-:endMonth(\\d{2})-:endDay(\\d{2})',
            async (req: Request, res: Response) => {
-  console.debug('In time range query');
   //console.info(req.params[0]); 
   //console.info(req.params[1]);
   let startTime = Date.now();
@@ -89,6 +88,14 @@ router.get(/^\/query\/v1\/datetime\/start=(?:([^\/]+?))\/end=(?:([^\/]+?))\/?$/i
     endTime = Date.parse(req.params[1].toUpperCase() + 'Z');
     startTime = startTime/1000.0;
     endTime = endTime/1000.0;
+    if (isNaN(startTime)) {
+      message = `Start time ${req.params[0]} likely has invalid format; try YYYY-MM-DDTHH:MM:SS`;
+      is404Error = true;
+    }
+    if (isNaN(endTime)) {
+      message = `End time ${req.params[1]} likely has invalid format; try YYYY-MM-DDTHH:MM:SS`;
+      is404Error = true;
+    }   
     if (startTime >= endTime) {
       message = `Start time ${req.params[0]} must be less than end time ${req.params[1]}`;
       is404Error = true;
@@ -109,7 +116,7 @@ router.get(/^\/query\/v1\/datetime\/start=(?:([^\/]+?))\/end=(?:([^\/]+?))\/?$/i
       res.json({
                 status: 200,
                 message: `Successfully queried events from ${startTime} to ${endTime}`,
-                data: events,
+                data: {events : events},
                }); 
     }
     catch (error) {
