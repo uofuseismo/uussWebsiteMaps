@@ -91,7 +91,7 @@ router.get(/^\/query\/v1\/datetime\/start=(?:([^\/]+?))\/end=(?:([^\/]+?))\/?$/i
     if (isNaN(startTime)) {
       message = `Start time ${req.params[0]} likely has invalid format; try YYYY-MM-DDTHH:MM:SS`;
       is404Error = true;
-    }
+    } 
     if (isNaN(endTime)) {
       message = `End time ${req.params[1]} likely has invalid format; try YYYY-MM-DDTHH:MM:SS`;
       is404Error = true;
@@ -133,7 +133,7 @@ router.get(/^\/query\/v1\/datetime\/start=(?:([^\/]+?))\/end=(?:([^\/]+?))\/?$/i
     console.debug("400 error");
     res.status(400);
     res.json({
-              status: 400,
+              status: 400, 
               message: message, 
               data: null,
              });

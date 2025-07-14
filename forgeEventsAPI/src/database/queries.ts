@@ -1,4 +1,3 @@
-/* global process */
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import { EventInformation } from '../utils/eventType';
@@ -24,6 +23,9 @@ const pool = new Pool({
   database: process.env.QSEEK_DATABASE_NAME,
   host: process.env.QSEEK_DATABASE_HOST ?? 'localhost',
   port: Number(pgPort),
+  connectionTimeoutMillis: 1000,
+  maxLifetimeSeconds: 60,
+  max: 25,
 });
 
 async function queryEventsInTimeRange(startTime : number, endTime : number) {
@@ -59,6 +61,7 @@ async function queryEventsInTimeRange(startTime : number, endTime : number) {
       }   
       //return null;
     }); 
+    client.release();
     // Purge any nulls
     events = initialEvents.filter( (e) => {return e != null;} );
   }
